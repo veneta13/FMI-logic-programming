@@ -1,7 +1,7 @@
 :- use_module(library(clpfd)).
 
 % find if X is in list
-member_1(X, [H|T]) :- X #= H; member_1(X, T).
+member_1(X, L) :- concat_lists(_, [X|_], L).
 
 member_2(X, [X|T]).
 member_2(X, [H|T]) :- X  #\= H, member_2(X, T).
@@ -30,7 +30,10 @@ remove_element(X, [H|T], [H|T1]) :- X #\= H, remove_element(X, T, T1).
 
 % permutate a list
 list_permutation([], []).
-list_permutation(P, [H|T]) :- remove_firsts(H, P, R), list_permutation(T, R).
+list_permutation(P, [H|T]) :- 
+    list_permutation(PT, T),
+    concat_lists(PT1, PT2, PT),
+    concat_lists(PT1, [H|PT2], P).
 
 % reverse a list
 list_reverse([], []).
@@ -88,3 +91,91 @@ list_merge_sort([A, B|T], L) :-
     list_merge_sort(L1, L1M), 
     list_merge_sort(L2, L2M),
     list_merge(L1M, L2M, L).
+
+% partition by pivot
+list_partition(_, [], [], []).
+list_partition(P, [H|R], [H|S], L) :- P #>= H, list_partition(P, R, S, L).
+list_partition(P, [H|R], S, [H|L]) :- P #< H, list_partition(P, R, S, L).
+
+% sort with quicksort
+list_quicksort([], []).
+list_quicksort([H|T], L) :- 
+    list_partition(H, T, LS, LL),
+    list_quicksort(LS, SLS),
+    list_quicksort(LL, SLL),
+    concat_lists(LS, [H|LL], L). 
+
+% check/get element in union
+elem_union(X, A, B) :- member_1(X, A); member_1(X, B).
+
+% check/get element in intersection
+elem_intersection(X, A, B) :- member_1(X, A), member_1(X, B).
+
+% check/get element in differenence
+elem_difference(X, A, B) :- member_1(X, A), not(member_1(X, B)).
+
+% check if A is subset of B
+is_subset(A, B) :- not((member_1(X, A), not(member_1(X, B)))).
+
+% check if A is equal to B
+equal_set(A, B) :- is_subset(A, B), is_subset(B, A).
+
+% check if lists are equal
+list_equal([], []).
+list_equal([H|T1], [H|T2]) :- list_equal(T1, T2).
+
+% get elements of list of lists
+elem_list_of_lists([H|T], E) :- list_equal(E, H); elem_list_of_lists(T, E).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% list to set
+list_to_set([], []).
+list_to_set([H|T], S) :- list_to_set(T, S), member_1(H, S).
+list_to_set([H|T], [H|S]) :- list_to_set(T, S), not(member_1(H, S)).
+
+% extract vertices of edge list
+extract_vertices([], []).
+extract_vertices([H|T], L) :-
+    extract_vertices(T, PV),
+    concat_lists(H, PV, LL),
+    list_to_set(LL, L).
+
+% check if something is not path
+% for some vertices U and V in the path, an edge between them does not exist
+is_not_path(E, P) :- 
+    concat_lists(_, [U, V|_], P),
+    not(
+        member_1([U, V], E);
+        member_1([V, U], E)
+    ).
+
+% check if something is path
+is_path(E, P) :- not(is_not_path(E, P)).
+
+% check if all vertices are not in path
+all_vertices_not_in_path(E, P) :- 
+    extract_vertices(E, VL),
+    member_1(X, VL),
+    not(member(X, P)).
+
+% check if all vertices are in path
+all_vertices_in_path(E, P) :- not(all_vertices_not_in_path(E, P)).
+
+% check if hamiltonian path
+hamiltonian_path(E, P) :-
+    is_path(E, P),
+    extract_vertices(E, V),
+    list_permutation(P, V).
+
+% get all hamiltonian paths in graph
+all_hamiltonian(E, VP) :-
+    extract_vertices(E, V),
+    list_permutation(VP, V),
+    hamiltonian_path(E, VP).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
