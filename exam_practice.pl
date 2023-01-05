@@ -10,6 +10,15 @@ member_2(X, [H|T]) :- X  #\= H, member_2(X, T).
 concat_lists([], L, L).
 concat_lists([H|T], L, [H|T1]) :- concat_lists(T, L, T1).
 
+% prefix
+list_prefix(X ,L) :- concat_lists(X, _, L).
+
+% suffix
+list_suffix(X, L) :- concat_lists(_, X, L).
+
+% sublist of a given list
+list_sublist(S, L) :- list_prefix(S, L), list_suffix(S, L).
+
 % check if X is the last element
 check_last(X, [X]).
 check_last(X, [_|T]) :- check_last(X, T).
@@ -175,7 +184,62 @@ all_hamiltonian(E, VP) :-
     list_permutation(VP, V),
     hamiltonian_path(E, VP).
 
+is_clique(E, C) :-
+    extract_vertices(E, V),
+    list_subsequence(V, SV),
+    list_permutation(SV, PV),
+    list_concat(_, [A, B|_], PV),
+    
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% count elements of list
+count_elements([], 0).
+count_elements([_|T], C) :- count_elements(T, C1), C is C1 + 1.
 
+% get/check the numbers between A and B
+between_1(A, B, A) :- A =< B.
+between_1(A, B, X) :- A < B, A1 is A + 1, between_1(A1, B, X).
+
+% common denominator of X and Y
+common_denom(X, Y, D) :- 
+    between_1(1, X, D),
+    D =< Y,
+    X mod D =:= 0,
+    Y mod D =:= 0.
+
+% greatest common denominator of X and Y
+greatest_common_denom(X, Y, D) :- 
+    common_denom(X, Y, D),
+    not(common_denom(X, Y, A), A > D).
+
+% get/check Fibonacci sequence member
+fibonacci_help(0, 1).
+fibonacci_help(F1, F2) :- fibonacci_help(F0, F2), F2 is F1 + F0.
+
+fibonacci_sequence(X) :- fibonacci_help(X, _).
+
+% check if a number is prime
+check_prime(X) :- 
+    XB is X // 2, 
+    not((between_1(2, XB, N), X mod N =:= 0)), 
+    X > 1. 
+
+% define natural numbers
+nat(0).
+nat(X) :- nat(X1), X is X1 + 1.
+
+% generate prime numbers
+generate_prime(X) :- nat(X), check_prime(X).
+
+% generate pairs
+pair(X, Y) :- nat(N), between_1(0, N, X), Y is N - X.
+
+% generate triples
+triple(X , Y , Z) :− 
+    int(S), 
+    between(0, S, X),
+    S1 is S − X,
+    between(0, S1, Y),
+    Z is S1 − Y.
