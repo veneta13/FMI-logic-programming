@@ -53,7 +53,7 @@ remove_(E, [H|T], [H|R]) :- E \= H,  remove_(E, T, R).
 
 remove_first(_, [], []).
 remove_first(H, [H|T], T).
-remove_first(E, [H|T], R) :- remove_first(E, T, R).
+remove_first(E, [H|T], R) :- E =\ H, remove_first(E, T, R).
 
 permutation_([], []).
 permutation_([H|T], L) :-
