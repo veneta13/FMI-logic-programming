@@ -42,3 +42,36 @@ balance_in_all(L) :-
         member_(SL, L),
         not(member_(B, SL))
     )).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%% TASK 2 %%%%%%%%%%%%%%%%%%%%%%%%%
+
+boolean_value(0).
+boolean_value(1).
+
+count_eq_pos([X], [X], 1).
+count_eq_pos([X], [Y], 0) :- X \= Y.
+count_eq_pos([X|TX], [Y|TY], C) :- X \= Y, count_eq_pos(TX, TY, C).
+count_eq_pos([X|TX], [X|TY], C) :- count_eq_pos(TX, TY, C1), C is C1 + 1.
+
+sum_eq_pos(Y, [X], C) :- count_eq_pos(Y, X, C).
+sum_eq_pos(Y, [H|T], C) :- 
+    count_eq_pos(Y, H, C1),
+    sum_eq_pos(Y, T, C2),
+    C is C1 + C2.
+
+peripheral_list(L, X, C) :-
+    member_(X, L),
+    sum_eq_pos(X, L, C),
+    not((
+        member_(Y, L),
+        sum_eq_pos(L, Y, CY),
+        CY > C
+    )).
+
+boolean_list(0, []).
+boolean_list(C, [H|T]) :- 
+    C > 0,
+    C1 is C - 1,
+    boolean_value(H),
+    boolean_list(C1, T).
