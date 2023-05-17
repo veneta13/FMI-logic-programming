@@ -17,7 +17,10 @@ list_prefix(X ,L) :- concat_lists(X, _, L).
 list_suffix(X, L) :- concat_lists(_, X, L).
 
 % sublist of a given list
-list_sublist(S, L) :- list_prefix(S, L), list_suffix(S, L).
+list_sublist(S, [H|T]) :- 
+    list_prefix(S, [H|T]);
+    list_suffix(S, [H|T]);
+    list_sublist(S, T).
 
 % check if X is the last element
 check_last(X, [X]).
@@ -155,10 +158,10 @@ extract_vertices([H|T], L) :-
 % for some vertices U and V in the path, an edge between them does not exist
 is_not_path(E, P) :- 
     concat_lists(_, [U, V|_], P),
-    not(
+    not((
         member_1([U, V], E);
         member_1([V, U], E)
-    ).
+    )).
 
 % check if something is path
 is_path(E, P) :- not(is_not_path(E, P)).
@@ -188,7 +191,7 @@ is_clique(E, C) :-
     extract_vertices(E, V),
     list_subsequence(V, SV),
     list_permutation(SV, PV),
-    list_concat(_, [A, B|_], PV),
+    concat_lists(_, [A, B|_], PV),
     
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -212,7 +215,10 @@ common_denom(X, Y, D) :-
 % greatest common denominator of X and Y
 greatest_common_denom(X, Y, D) :- 
     common_denom(X, Y, D),
-    not(common_denom(X, Y, A), A > D).
+    not((
+        common_denom(X, Y, A),
+        A > D)
+    ).
 
 % get/check Fibonacci sequence member
 fibonacci_help(0, 1).
