@@ -3,7 +3,7 @@
 % find if X is in list
 member_1(X, L) :- concat_lists(_, [X|_], L).
 
-member_2(X, [X|T]).
+member_2(X, [X|_]).
 member_2(X, [H|T]) :- X  #\= H, member_2(X, T).
 
 % concatenate lists
@@ -28,7 +28,7 @@ check_last(X, [_|T]) :- check_last(X, T).
 
 % remove last element of list
 remove_last([], []).
-remove_last([X], []).
+remove_last([_], []).
 remove_last([H|T], [H|R]) :- remove_last(T, R).
 
 % remove the first element of the list equal to X
@@ -73,7 +73,7 @@ list_cartesian_product([H1|T1], [H2|T2]) :- member_1(H2, H1), list_cartesian_pro
 
 % get element by index
 get_by_index([E|_], 0, E).
-get_by_index([H|T], I, E) :- I #\= 0, I1 #= I - 1, get_by_index(T, I1, E).
+get_by_index([_|T], I, E) :- I #\= 0, I1 #= I - 1, get_by_index(T, I1, E).
 
 % get the smaller one of two elements
 smaller_2(A, B, A) :- A #=< B.
@@ -121,7 +121,7 @@ list_quicksort([H|T], L) :-
     list_partition(H, T, LS, LL),
     list_quicksort(LS, SLS),
     list_quicksort(LL, SLL),
-    concat_lists(LS, [H|LL], L). 
+    concat_lists(SLS, [H|SLL], L). 
 
 % check/get element in union
 elem_union(X, A, B) :- member_1(X, A); member_1(X, B).
