@@ -29,7 +29,7 @@ check_last(X, [_|T]) :- check_last(X, T).
 % remove last element of list
 remove_last([], []).
 remove_last([_], []).
-remove_last([H|T], [H|R]) :- remove_last(T, R).
+remove_last([H|T], [H|R]) :- T \= [], remove_last(T, R).
 
 % remove the first element of the list equal to X
 remove_first_X(X, [X|T], T).
