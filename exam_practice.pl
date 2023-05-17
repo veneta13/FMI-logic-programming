@@ -192,12 +192,6 @@ all_hamiltonian(E, VP) :-
     extract_vertices(E, V),
     list_permutation(VP, V),
     hamiltonian_path(E, VP).
-
-is_clique(E, C) :-
-    extract_vertices(E, V),
-    list_subsequence(V, SV),
-    list_permutation(SV, PV),
-    concat_lists(_, [A, B|_], PV),
     
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -249,9 +243,4 @@ generate_prime(X) :- nat(X), check_prime(X).
 pair(X, Y) :- nat(N), between_1(0, N, X), Y is N - X.
 
 % generate triples
-triple(X , Y , Z) :− 
-    int(S), 
-    between(0, S, X),
-    S1 is S − X,
-    between(0, S1, Y),
-    Z is S1 − Y.
+triples(X, Y, Z) :- nat(N), between(0, N, X), N1 is N - X, between(0, N1, Y), Z is N1 - Y.
