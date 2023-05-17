@@ -243,4 +243,9 @@ generate_prime(X) :- nat(X), check_prime(X).
 pair(X, Y) :- nat(N), between_1(0, N, X), Y is N - X.
 
 % generate triples
-triples(X, Y, Z) :- nat(N), between(0, N, X), N1 is N - X, between(0, N1, Y), Z is N1 - Y.
+triples(X, Y, Z) :- 
+    nat(N), 
+    between(0, N, X), 
+    N1 is N - X,
+    between(0, N1, Y), 
+    Z is N1 - Y.
