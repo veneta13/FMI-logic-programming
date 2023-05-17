@@ -69,7 +69,9 @@ list_subsequence([_|T], L) :- list_subsequence(T, L).
 
 % get cartesian product of lists
 list_cartesian_product([], []).
-list_cartesian_product([H1|T1], [H2|T2]) :- member_1(H2, H1), list_cartesian_product(T1, T2).
+list_cartesian_product([L1|T1], [X|T2]) :- 
+    member_1(X, L1),
+    list_cartesian_product(T1, T2).
 
 % get element by index
 get_by_index([E|_], 0, E).
