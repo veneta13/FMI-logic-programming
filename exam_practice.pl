@@ -51,6 +51,12 @@ list_permutation(P, [H|T]) :-
 list_reverse([], []).
 list_reverse(L, [H|T]) :- check_last(H, L), remove_last(L, L1), list_reverse(L1, T).
 
+% find even elements
+get_even(L, R) :- findall(X, (member(X, L), X mod 2 =:= 0), R).
+
+% find odd elements
+get_odd(L, R) :- findall(X, (member(X, L), X mod 2 =:= 1), R).
+
 % check if list is sorted
 list_sorted([]).
 list_sorted([_]).
