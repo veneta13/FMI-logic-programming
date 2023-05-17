@@ -51,7 +51,7 @@ list_permutation(P, [H|T]) :-
 list_reverse([], []).
 list_reverse(L, [H|T]) :- check_last(H, L), remove_last(L, L1), list_reverse(L1, T).
 
-% sort list
+% check if list is sorted
 list_sorted([]).
 list_sorted([_]).
 list_sorted([A, B|T]) :- A #=< B, list_sorted([B|T]).
