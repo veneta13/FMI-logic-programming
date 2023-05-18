@@ -150,6 +150,14 @@ elem_list_of_lists([H|T], R) :- R = H; elem_list_of_lists(T, R).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% get check if there is edge between X and Y in undirected graph
+edge_undirected([_, E], X, Y) :- 
+    member_1([X, Y], E);
+    member_1([Y, X], E).
+
+% get check if there is edge between X and Y in directed graph
+edge_directed([_, E], X, Y) :- member_1([X, Y], E).
+
 % list to set
 list_to_set([], []).
 list_to_set([H|T], S) :- list_to_set(T, S), member_1(H, S).
