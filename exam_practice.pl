@@ -145,7 +145,7 @@ list_equal([], []).
 list_equal([H|T1], [H|T2]) :- list_equal(T1, T2).
 
 % get elements of list of lists
-elem_list_of_lists([H|T], E) :- list_equal(E, H); elem_list_of_lists(T, E).
+elem_list_of_lists([H|T], R) :- R = H; elem_list_of_lists(T, R).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
