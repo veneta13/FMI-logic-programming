@@ -170,6 +170,16 @@ extract_vertices([H|T], L) :-
     concat_lists(H, PV, LL),
     list_to_set(LL, L).
 
+% check if there is a path between the two vertices
+vertices_path(E, X, Y, P):- vertices_path(E, X, Y, [], P).
+vertices_path(_, _, Y, Vis, P) :- 
+    append([Y], _, Vis),
+    reverse(Vis, P).
+vertices_path(E, X, Y, Vis, P):-
+    member([X, Z], E), 
+    not(member(Z, Vis)),
+    vertices_path(E, Z, Y, [X|Vis], P).
+
 % check if something is not path
 % for some vertices U and V in the path, an edge between them does not exist
 is_not_path(E, P) :- 
