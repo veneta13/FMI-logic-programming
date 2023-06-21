@@ -3,6 +3,7 @@
 % find if X is in list
 member_1(X, L) :- concat_lists(_, [X|_], L).
 
+% better implementation of member
 member_2(X, [X|_]).
 member_2(X, [H|T]) :- X  #\= H, member_2(X, T).
 
@@ -39,6 +40,11 @@ remove_first_X(X, [H|T], [H|T1]) :- X #\= H, remove_first_X(X, T, T1).
 remove_element(_, [], []).
 remove_element(X, [X|T], T1) :- remove_element(X, T, T1).
 remove_element(X, [H|T], [H|T1]) :- X #\= H, remove_element(X, T, T1).
+
+list_rotate([], []).
+list_rotate(L, R) :-
+    concat_lists(L1, L2, L),
+    concat_lists(L2, L1, R).
 
 % permutate a list
 list_permutation([], []).
