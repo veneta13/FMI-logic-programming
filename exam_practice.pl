@@ -284,3 +284,9 @@ generate_len_sum(L, S, [H|T]) :-
     L1 is L - 1,
     S1 is S - H,
     generate_len_sum(L1, S1, T).
+
+generate_all([]).
+generate_all(X):- 
+    nat(N),
+    between(1, N, L),
+    generate_len_sum(L, N, X).
