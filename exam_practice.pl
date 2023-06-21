@@ -1,5 +1,9 @@
 :- use_module(library(clpfd)).
 
+% check if something is list
+is_list([]).
+is_list([_|_]).
+
 % find if X is in list
 member_1(X, L) :- concat_lists(_, [X|_], L).
 
@@ -41,6 +45,7 @@ remove_element(_, [], []).
 remove_element(X, [X|T], T1) :- remove_element(X, T, T1).
 remove_element(X, [H|T], [H|T1]) :- X #\= H, remove_element(X, T, T1).
 
+% rotate list elements
 list_rotate([], []).
 list_rotate(L, R) :-
     concat_lists(L1, L2, L),
@@ -56,6 +61,21 @@ list_permutation(P, [H|T]) :-
 % reverse a list
 list_reverse([], []).
 list_reverse(L, [H|T]) :- check_last(H, L), remove_last(L, L1), list_reverse(L1, T).
+
+% divide list into sublists
+list_divide([], []).
+list_divide(L, [H|T]) :-
+    concat_lists(H, X, L),
+    H \= [],
+    list_divide(X, T).
+
+% flatten list
+list_flatten(X, [X]) :- not(is_list(X)).
+list_flatten([], []).
+list_flatten([H|T], R) :-
+    list_flatten(H, FH),
+    list_flatten(T, FT),
+    concat_lists(FH, FT, R).
 
 % find even elements
 get_even(L, R) :- findall(X, (member(X, L), X mod 2 =:= 0), R).
