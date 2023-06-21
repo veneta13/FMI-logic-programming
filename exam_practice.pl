@@ -275,3 +275,12 @@ triples(X, Y, Z) :-
     N1 is N - X,
     between(0, N1, Y), 
     Z is N1 - Y.
+
+% generate list of L elements with sum S
+generate_len_sum(1, S, [S]) :- S > 0.
+generate_len_sum(L, S, [H|T]) :-
+    L > 1,
+    between(1, S, H),
+    L1 is L - 1,
+    S1 is S - H,
+    generate_len_sum(L1, S1, T).
