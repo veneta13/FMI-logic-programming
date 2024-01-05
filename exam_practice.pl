@@ -8,10 +8,13 @@ is_list([_|_]).
 member_1(X, L) :- concat_lists(_, [X|_], L).
 
 % better implementation of member
+% must have an upper bound on the length of Т
 member_2(X, [X|_]).
 member_2(X, [H|T]) :- X  #\= H, member_2(X, T).
 
 % concatenate lists
+% must have an upper bound on the length of the first
+% or the third list
 concat_lists([], L, L).
 concat_lists([H|T], L, [H|T1]) :- concat_lists(T, L, T1).
 
@@ -163,8 +166,17 @@ elem_difference(X, A, B) :- member_1(X, A), not(member_1(X, B)).
 % check if A is subset of B
 is_subset(A, B) :- not((member_1(X, A), not(member_1(X, B)))).
 
+% implementation of subset with forall 
+is_subset_2(A, B):- forall(member_2(X, A), member_2(X, B)).
+
 % check if A is equal to B
 equal_set(A, B) :- is_subset(A, B), is_subset(B, A).
+
+% check if all elements of L are even numbers
+all_even(L) :- forall(member_2(X, L), X mod 2 =:= 0).
+
+% check if all elements of L are odd numbers
+all_even(L) :- forall(member_2(X, L), X mod 2 =:= 1).
 
 % check if lists are equal
 list_equal([], []).
@@ -242,6 +254,10 @@ all_hamiltonian(E, VP) :-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% get/check the length of a list
+% can only work if on the left side of :- there are no constants
+list_len([], N) :- N #= 0.
+list_len([_|X], N) :- N #> 0, list_len(X, N - 1).
 
 % count elements of list
 count_elements([], 0).
@@ -276,7 +292,7 @@ fibonacci_sequence(X) :- fibonacci_help(X, _).
 check_prime(X) :- 
     XB is X // 2, 
     not((between_1(2, XB, N), X mod N =:= 0)), 
-    X > 1. 
+    X > 1.
 
 % define natural numbers
 nat(0).
