@@ -54,12 +54,16 @@ list_rotate(L, R) :-
     concat_lists(L1, L2, L),
     concat_lists(L2, L1, R).
 
+% remove random element from list
+remove_random(L, X, R) :-
+    concat_lists(L1, [X|L2], L),
+    concat_lists(L1, L2, R).
+
 % permutate a list
 list_permutation([], []).
-list_permutation(P, [H|T]) :- 
-    list_permutation(PT, T),
-    concat_lists(PT1, PT2, PT),
-    concat_lists(PT1, [H|PT2], P).
+list_permutation([L1|L2], [X|T]) :- 
+    remove_random([L1|L2], X, R),
+    list_permutation(R, T).
 
 % reverse a list
 list_reverse([], []).
@@ -326,3 +330,15 @@ generate_all(X):-
     nat(N),
     between(1, N, L),
     generate_len_sum(L, N, X).
+
+% get all pairs of elements of list
+% (a pair does not contain the same element twice)
+get_all_pairs(L, R) :- 
+    findall(
+        [A, B], 
+        (
+            append(_, [A|T], L), 
+            member(B, T)
+        ),
+        R
+    ).
